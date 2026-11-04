@@ -1,0 +1,36 @@
+# vectora.toml — Configuração do workspace Vectora. Seguro para commitar.
+# Edite as seções abaixo para personalizar este workspace.
+
+[workspace]
+name = "vectora"
+# description = ""
+
+# [storage]
+# mode = "complete"                          # "lite" | "complete" — sobrescreve o padrão global
+# postgres_dsn = "${MEUPROJETO_POSTGRES_DSN}" # nunca credenciais literais
+# qdrant_url = "http://localhost:6333"
+# qdrant_collection = "meuprojeto_articles"   # isola vetores por workspace
+# redis_url = "${MEUPROJETO_REDIS_URL}"
+
+# [rag]
+# embedding_model = "embed-multilingual-v3.0"
+# chunk_size = 1000
+# chunk_overlap = 200
+
+# [agent]
+# allowed_models = ["claude-sonnet-4-6"]
+# default_model = "claude-sonnet-4-6"
+
+# [sandbox]
+# AI Jail — isola terminal, PTY interativo e tools de arquivo (agente e
+# usuário) num worker jailado por workspace. Ausente = sandbox desligado
+# (comportamento atual do produto, sem regressão).
+# enabled = true
+# backend = "local"              # "local" (bwrap/WSL2/macOS Seatbelt) | "docker" | "singularity" | "ssh" | "modal"
+# rw_paths = ["."]                # paths com leitura+escrita liberada dentro do jail
+# ro_paths = []                   # paths só-leitura adicionais
+# mask = [".env", "**/*.pem", "**/.ssh/**", "**/.aws/**"]  # nunca visíveis ao worker
+# no_gpu = true                   # nega acesso a dispositivos de GPU
+# docker_image = "python:3.13-slim"  # só relevante com backend = "docker"
+# remote_host = ""                # só relevante com backend = "ssh"
+# ssh_key_id = ""                 # só relevante com backend = "ssh"
