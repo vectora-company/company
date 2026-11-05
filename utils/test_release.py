@@ -199,6 +199,9 @@ def test_apply_creates_missing_changelog(tmp_path: Path) -> None:
     assert (
         (tmp_path / "CHANGELOG.md").read_text(encoding="utf-8").startswith("## [0.3.1]")
     )
+    changelog = (tmp_path / "CHANGELOG.md").read_bytes()
+    assert changelog.endswith(b"\n")
+    assert not changelog.endswith(b"\n\n")
 
 
 def test_current_version_comes_from_first_version_file(tmp_path: Path) -> None:
