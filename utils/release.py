@@ -312,7 +312,7 @@ def apply_plan(root: Path, plan: ReleasePlan, files: list[str]) -> None:
     for relative in files:
         _replace_version(root / relative, plan.next_version)
     changelog = root / "CHANGELOG.md"
-    text = changelog.read_text(encoding="utf-8")
+    text = changelog.read_text(encoding="utf-8") if changelog.exists() else ""
     if plan.bump == "none":
         return
     features = [entry for entry in plan.entries if entry.startswith("feat")]

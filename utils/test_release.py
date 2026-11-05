@@ -180,6 +180,23 @@ def test_apply_updates_package_version_and_changelog(tmp_path: Path) -> None:
     ]
 
 
+def test_apply_creates_missing_changelog(tmp_path: Path) -> None:
+    """A release bootstrap must work before the repository has a changelog."""
+    package = tmp_path / "package.json"
+    package.write_text(
+        json.dumps({"name": "vectora-company", "version": "0.3.0"}),
+        encoding="utf-8",
+    )
+    plan = calculate_plan("0.3.0", [Commit(subject="fix: repair release")])
+
+    apply_plan(tmp_path, plan, ["package.json"])
+
+    assert json.loads(package.read_text(encoding="utf-8"))["version"] == "0.3.1"
+    assert (
+        (tmp_path / "CHANGELOG.md").read_text(encoding="utf-8").startswith("## [0.3.1]")
+    )
+
+
 def test_current_version_comes_from_first_version_file(tmp_path: Path) -> None:
     (tmp_path / "package.json").write_text('{"version": "0.3.0"}', encoding="utf-8")
     (tmp_path / "pyproject.toml").write_text(
