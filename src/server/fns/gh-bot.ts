@@ -19,10 +19,8 @@ export interface GhBotSettings {
   provider: GhBotProvider;
   model: string;
   review_style: GhBotReviewStyle;
-  /** "Usar minha própria instância Vectora" — revisão roda no motor nativo
-   * da instância do usuário (via túnel do gateway) em vez do runner
-   * efêmero do GitHub Actions. Cai pro modo padrão automaticamente se a
-   * instância estiver offline no momento do PR (ver GET /gha-bot/config). */
+  /** Uses the user's own Vectora instance for reviews when enabled; falls back
+   * to the configured provider if that instance is unavailable. */
   self_hosted_enabled: boolean;
   updated_at: string;
 }

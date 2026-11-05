@@ -1,31 +1,32 @@
-name: Bug Report
-description: Something isn't working correctly
+name: Company website bug
+description: Report an issue with the Vectora company website or account dashboard
 labels: ["bug", "needs-triage"]
 assignees: ["brunosoares"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug! Please fill out the sections below.
+        Please report issues reproducible on the Vectora company website or account dashboard. Do not include passwords, tokens, or payment details.
 
   - type: input
-    id: version
+    id: page
     attributes:
-      label: Vectora version
-      description: Output of `vectora --version`
-      placeholder: "1.0.0"
+      label: Page or feature
+      description: Which page or dashboard feature is affected?
+      placeholder: "Pricing, account settings, billing..."
     validations:
       required: true
 
   - type: dropdown
     id: os
     attributes:
-      label: Operating system
+      label: Browser and operating system
       options:
-        - Ubuntu 22.04+
-        - Debian 12+
-        - macOS (Docker Desktop)
-        - Other Linux
+        - Chrome on Windows
+        - Chrome on macOS
+        - Chrome on Linux
+        - Firefox
+        - Safari
         - Other
     validations:
       required: true
@@ -44,10 +45,9 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Run `vectora setup`
-        2. Open chat
-        3. Type "..."
-        4. See error
+        1. Open the affected page
+        2. Perform the action
+        3. Describe what happened
     validations:
       required: true
 
@@ -63,16 +63,5 @@ body:
     id: logs
     attributes:
       label: Logs / error output
-      description: Paste relevant logs (use `vectora --log-level debug`)
+      description: Paste relevant browser console or network errors, after removing personal data
       render: shell
-
-  - type: dropdown
-    id: plan
-    attributes:
-      label: Plan
-      options:
-        - Trial
-        - Plus
-        - Pro
-    validations:
-      required: true

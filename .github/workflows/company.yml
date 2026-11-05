@@ -1,0 +1,110 @@
+name: Company
+
+on:
+  push:
+    branches: [master, "release/**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+concurrency:
+  group: company-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "24"
+  PNPM_VERSION: "11.5.0"
+
+jobs:
+  validate:
+    name: Lint, types, tests and build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Set up Python utilities
+        uses: astral-sh/setup-uv@v7
+      - name: Install pre-commit
+        run: uv tool install pre-commit
+      - name: Run repository hooks
+        run: pre-commit run --all-files
+      - name: Test release and repository utilities
+        run: uv run --with pydantic --with pytest pytest utils/test_checks.py utils/test_release.py -q
+      - name: Check formatting
+        run: pnpm run check
+      - name: Lint
+        run: pnpm run lint
+      - name: Type check
+        run: pnpm run typecheck
+      - name: Unit tests
+        run: pnpm run test
+      - name: Production build
+        run: pnpm run build
+
+  pull-request-policy:
+    name: Pull request metadata and release line
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v7
+      - name: Check title and description
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: uv run --with pydantic python utils/checks.py pr-metadata
+      - name: Validate base branch and milestone
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          CURRENT_PR_BASE: ${{ github.event.pull_request.base.ref }}
+          CURRENT_PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          CURRENT_PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          CURRENT_RELEASE_MILESTONE: ${{ github.event.pull_request.milestone.title }}
+        run: uv run --with pydantic python utils/release.py validate-milestone
+
+  deploy:
+    name: Deploy production
+    runs-on: ubuntu-24.04
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    environment: Production
+    concurrency:
+      group: company-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "VERCEL_TOKEN is not configured; skipping deployment."
+            exit 0
+          fi
+          pnpm exec vercel --prod --yes --token="$VERCEL_TOKEN"

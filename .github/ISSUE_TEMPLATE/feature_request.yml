@@ -1,12 +1,12 @@
-name: Feature Request
-description: Suggest a new feature or improvement
+name: Website or account improvement
+description: Suggest an improvement to the Vectora company website or account experience
 labels: ["enhancement", "needs-triage"]
 assignees: ["brunosoares"]
 body:
   - type: markdown
     attributes:
       value: |
-        Have an idea to make Vectora better? Describe it below.
+        Suggest improvements to the company website, public product information, or account and billing experience.
 
   - type: textarea
     id: problem
@@ -36,26 +36,10 @@ body:
     attributes:
       label: Area
       options:
-        - Chat / LLM
-        - RAG / Documents
-        - Agents
-        - MCP / Integrations
-        - REST API / SDK
-        - CLI
-        - Dashboard / UI
-        - Billing / Licensing
-        - Self-hosting / Docker
+        - Company website
+        - Product information
+        - Account dashboard
+        - Billing
         - Other
-    validations:
-      required: true
-
-  - type: dropdown
-    id: plan
-    attributes:
-      label: Your plan
-      options:
-        - Trial
-        - Plus
-        - Pro
     validations:
       required: true
