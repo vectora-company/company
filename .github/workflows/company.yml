@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Set up Python utilities
-        uses: astral-sh/setup-uv@v10
+        uses: astral-sh/setup-uv@v10.3.3
       - name: Install pre-commit
         run: uv tool install pre-commit
       - name: Run repository hooks

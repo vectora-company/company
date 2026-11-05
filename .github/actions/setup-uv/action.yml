@@ -38,7 +38,7 @@ runs:
         architecture: ${{ inputs.architecture }}
 
     - name: Install uv (cache nativo keyed em uv.lock)
-      uses: astral-sh/setup-uv@v10
+      uses: astral-sh/setup-uv@v10.3.3
       with:
         version: ${{ inputs.uv-version }}
         enable-cache: true
