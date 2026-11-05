@@ -332,7 +332,8 @@ def apply_plan(root: Path, plan: ReleasePlan, files: list[str]) -> None:
             lines.extend([f"### {title}", ""])
             lines.extend(f"- {entry}" for entry in entries)
             lines.append("")
-    changelog.write_text("\n".join(lines) + "\n" + text.lstrip("\n"), encoding="utf-8")
+    updated = "\n".join(lines) + "\n" + text.lstrip("\n")
+    changelog.write_text(updated.rstrip("\n") + "\n", encoding="utf-8")
 
 
 def plan_main() -> int:
