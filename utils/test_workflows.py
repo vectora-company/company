@@ -80,3 +80,12 @@ def test_pull_request_messages_are_not_indented_into_code_blocks() -> None:
 
         assert "const message = [" in workflow, name
         assert "const message = `" not in workflow, name
+
+
+def test_setup_uv_is_pinned_to_an_exact_release() -> None:
+    """O setup-uv não publica tag de major flutuante (`v10` não existe); a
+    referência precisa ser uma versão exata."""
+    for path in [*WORKFLOWS.glob("*.yml"), *GITHUB.glob("actions/*/action.yml")]:
+        text = path.read_text("utf-8")
+        for ref in re.findall(r"astral-sh/setup-uv@(\S+)", text):
+            assert re.fullmatch(r"v\d+\.\d+\.\d+", ref), (path.name, ref)
