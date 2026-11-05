@@ -49,6 +49,10 @@ def test_selection_exposes_version_files_only_for_release_branches() -> None:
     maintenance = selection_for_branch(config.maintenance.branch, config)
 
     assert config.version_files == ("package.json",)
+    assert development["development_milestone"] == config.development.milestone
+    assert development["maintenance_milestone"] == config.maintenance.milestone
+    assert maintenance["development_milestone"] == config.development.milestone
+    assert maintenance["maintenance_milestone"] == config.maintenance.milestone
     assert development["version_files"] == "package.json"
     assert maintenance["version_files"] == development["version_files"]
     assert "config_file" not in development

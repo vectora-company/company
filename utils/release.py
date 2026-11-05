@@ -110,6 +110,7 @@ def selection_for_branch(branch: str | None, config: ReleaseLines) -> dict[str, 
     return {
         "enabled": "true" if selected else "false",
         "maintenance_branch": config.maintenance.branch,
+        "maintenance_milestone": config.maintenance.milestone,
         "development_branch": config.development.branch,
         "development_milestone": config.development.milestone,
         "version_files": " ".join(config.version_files) if selected else "",

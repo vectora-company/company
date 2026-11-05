@@ -25,6 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          # The no-plan-comments hook diffs against origin/<PR base>.
+          # A depth-1 checkout of the synthetic merge ref does not create that ref.
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v6
         with:
