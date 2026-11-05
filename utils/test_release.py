@@ -165,7 +165,9 @@ def test_non_release_commits_do_not_create_plan() -> None:
 
 def test_apply_updates_package_version_and_changelog(tmp_path: Path) -> None:
     package = tmp_path / "package.json"
-    package.write_text(json.dumps({"name": "vectora-company", "version": "0.3.0"}), encoding="utf-8")
+    package.write_text(
+        json.dumps({"name": "vectora-company", "version": "0.3.0"}), encoding="utf-8"
+    )
     changelog = tmp_path / "CHANGELOG.md"
     changelog.write_text("# Changelog\n", encoding="utf-8")
     plan = calculate_plan("0.3.0", [Commit(subject="fix: repair release")])
@@ -938,9 +940,12 @@ def test_master_pr_rejects_maintenance_milestone() -> None:
 
 def test_feature_pr_accepts_development_milestone() -> None:
     """Aceita uma feature na linha de desenvolvimento com sua milestone."""
-    assert release.validate_pull_request(
-        _event(base=DEVELOPMENT_BRANCH, milestone=DEVELOPMENT_MILESTONE)
-    ) == []
+    assert (
+        release.validate_pull_request(
+            _event(base=DEVELOPMENT_BRANCH, milestone=DEVELOPMENT_MILESTONE)
+        )
+        == []
+    )
 
 
 def test_development_pr_rejects_maintenance_milestone() -> None:
