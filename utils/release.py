@@ -1321,7 +1321,11 @@ def select_update_channel(version: str | None) -> UpdateChannel:
         maintenance_series = _release_lines().maintenance.milestone.removesuffix(".x")
     except (OSError, ValueError):
         return "latest"
-    return "maintenance" if f"{match.group('major')}.{match.group('minor')}" == maintenance_series else "latest"
+    return (
+        "maintenance"
+        if f"{match.group('major')}.{match.group('minor')}" == maintenance_series
+        else "latest"
+    )
 
 
 def update_channel_main(argv: Sequence[str] | None = None) -> int:
