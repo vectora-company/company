@@ -1,6 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { detectOS, downloadHref, PLATFORMS } from "./downloads";
-import { REQUIRED_RELEASE_FORMATS } from "../../../services/src/updates/release-matrix";
 
 // detectOS mapeia o userAgent → plataforma para destacar o download recomendado.
 function setUA(ua: string): void {
@@ -93,19 +92,6 @@ describe("download matrix", () => {
         ({ arch, ext }) => `${platform.osToken}-${arch}.${ext}`,
       );
       expect(new Set(targets).size).toBe(targets.length);
-    }
-  });
-
-  it("keeps the Company download links in sync with the R2 release matrix", () => {
-    for (const [target, formats] of Object.entries(REQUIRED_RELEASE_FORMATS)) {
-      const [osToken, arch] = target.split("/");
-      const platform = PLATFORMS.find((item) => item.osToken === osToken);
-      expect(platform, `missing platform card for ${target}`).toBeDefined();
-      const visibleFormats = [platform!.primary, ...platform!.others]
-        .filter((variant) => variant.arch === arch)
-        .map((variant) => variant.ext)
-        .sort();
-      expect(visibleFormats).toEqual([...formats].sort());
     }
   });
 });

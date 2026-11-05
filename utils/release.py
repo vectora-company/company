@@ -110,6 +110,7 @@ def selection_for_branch(branch: str | None, config: ReleaseLines) -> dict[str, 
     return {
         "enabled": "true" if selected else "false",
         "maintenance_branch": config.maintenance.branch,
+        "maintenance_milestone": config.maintenance.milestone,
         "development_branch": config.development.branch,
         "development_milestone": config.development.milestone,
         "version_files": " ".join(config.version_files) if selected else "",
@@ -312,7 +313,7 @@ def apply_plan(root: Path, plan: ReleasePlan, files: list[str]) -> None:
     for relative in files:
         _replace_version(root / relative, plan.next_version)
     changelog = root / "CHANGELOG.md"
-    text = changelog.read_text(encoding="utf-8")
+    text = changelog.read_text(encoding="utf-8") if changelog.exists() else ""
     if plan.bump == "none":
         return
     features = [entry for entry in plan.entries if entry.startswith("feat")]

@@ -32,6 +32,15 @@ jobs:
         with:
           node-version: "24"
       - uses: astral-sh/setup-uv@v7
+      - name: Ensure release label exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create "autorelease: pending" \
+            --repo "$GITHUB_REPOSITORY" \
+            --color "0E8A16" \
+            --description "Release PR awaiting merge" \
+            --force
       - name: Resolve configured line
         id: line
         env:
@@ -92,7 +101,11 @@ jobs:
           body="$RUNNER_TEMP/release-pr-body.md"
           uv run --with pydantic python utils/release.py pr-body CHANGELOG.md "$body"
           existing="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$release_branch" --base master --state open --json number --jq '.[0].number // empty')"
-          milestone="${{ steps.line.outputs.maintenance_milestone }}"
+          if [[ "$BRANCH" == "master" ]]; then
+            milestone="${{ steps.line.outputs.maintenance_milestone }}"
+          else
+            milestone="${{ steps.line.outputs.development_milestone }}"
+          fi
           if [[ -n "$existing" ]]; then
             gh pr edit "$existing" --repo "$GITHUB_REPOSITORY" --title "chore(master): release $next" --body-file "$body" --milestone "$milestone" --add-label "autorelease: pending"
           else

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import io
 import json
-import subprocess
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 from typing import NotRequired, TypedDict
@@ -49,6 +49,10 @@ def test_selection_exposes_version_files_only_for_release_branches() -> None:
     maintenance = selection_for_branch(config.maintenance.branch, config)
 
     assert config.version_files == ("package.json",)
+    assert development["development_milestone"] == config.development.milestone
+    assert development["maintenance_milestone"] == config.maintenance.milestone
+    assert maintenance["development_milestone"] == config.development.milestone
+    assert maintenance["maintenance_milestone"] == config.maintenance.milestone
     assert development["version_files"] == "package.json"
     assert maintenance["version_files"] == development["version_files"]
     assert "config_file" not in development
@@ -180,6 +184,23 @@ def test_apply_updates_package_version_and_changelog(tmp_path: Path) -> None:
     ]
 
 
+def test_apply_creates_missing_changelog(tmp_path: Path) -> None:
+    """A release bootstrap must work before the repository has a changelog."""
+    package = tmp_path / "package.json"
+    package.write_text(
+        json.dumps({"name": "vectora-company", "version": "0.3.0"}),
+        encoding="utf-8",
+    )
+    plan = calculate_plan("0.3.0", [Commit(subject="fix: repair release")])
+
+    apply_plan(tmp_path, plan, ["package.json"])
+
+    assert json.loads(package.read_text(encoding="utf-8"))["version"] == "0.3.1"
+    assert (
+        (tmp_path / "CHANGELOG.md").read_text(encoding="utf-8").startswith("## [0.3.1]")
+    )
+
+
 def test_current_version_comes_from_first_version_file(tmp_path: Path) -> None:
     (tmp_path / "package.json").write_text('{"version": "0.3.0"}', encoding="utf-8")
     (tmp_path / "pyproject.toml").write_text(
@@ -216,13 +237,13 @@ def test_cli_prints_current_version_without_commits(tmp_path: Path) -> None:
         "pyproject.toml",
     ]
 
-    ok = subprocess.run(  # noqa: S603
+    ok = subprocess.run(  # noqa: S603  # nosec B603
         [*args, "--print-current-version"], capture_output=True, text=True, check=False
     )
     assert ok.returncode == 0
     assert ok.stdout.strip() == "0.3.0"
 
-    missing_commits = subprocess.run(  # noqa: S603
+    missing_commits = subprocess.run(  # noqa: S603  # nosec B603
         args, capture_output=True, text=True, check=False
     )
     assert missing_commits.returncode == 2

@@ -13,5 +13,10 @@ build
 # Código gerado (TanStack Router)
 src/routeTree.gen.ts
 
+# Arquivos e caches gerados pelo projeto inlang e ignorados pelo Git
+project.inlang/.meta.json
+project.inlang/README.md
+project.inlang/cache
+
 # Código gerado (Paraglide i18n) — compilado no build, não versionado
 src/paraglide
