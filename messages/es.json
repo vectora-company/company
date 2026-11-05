@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "$comment": "Novas chaves devem ser adicionadas em ordem alfabética; use utils/sort_translation_keys.py.",
+  "$comment": "Novas chaves devem ser adicionadas em ordem alfabética; use utils/checks.py translation-keys --check.",
   "account_change_password": "Cambiar contraseña",
   "account_delete_confirm_cta": "Confirmar eliminación",
   "account_delete_confirm_desc": "Escribe tu email para confirmar. Esta acción no se puede deshacer.",
@@ -313,7 +313,7 @@
   "gh_bot_error_missing_key": "Indica la clave de API (la actual no se reenvía por seguridad).",
   "gh_bot_error_missing_model": "Indica el modelo.",
   "gh_bot_install_step1": "En el repositorio, crea un Environment llamado vectora-bot (Settings → Environments) y registra el token generado arriba como el secret VECTORA_BOT_TOKEN de ese environment.",
-  "gh_bot_install_step2": "Pega el workflow de abajo en .github/workflows/vectora.yml.",
+  "gh_bot_install_step2": "Pega el workflow de abajo en un archivo de workflows de tu repositorio.",
   "gh_bot_install_title": "Instalación",
   "gh_bot_label_api_key": "Clave de API del proveedor",
   "gh_bot_label_model": "Modelo",

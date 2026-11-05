@@ -6,14 +6,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        Help us improve the Vectora docs at docs.vectora.company.
+        Help us improve the public Vectora company website and product information.
 
   - type: input
     id: url
     attributes:
       label: Page URL
-      description: Link to the docs page with the issue
-      placeholder: "https://docs.vectora.company/guides/vps-deploy"
+      description: Link to the affected page
+      placeholder: "https://vectora.company/features"
     validations:
       required: true
 

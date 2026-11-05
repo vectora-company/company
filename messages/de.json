@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "$comment": "Novas chaves devem ser adicionadas em ordem alfabética; use utils/sort_translation_keys.py.",
+  "$comment": "Novas chaves devem ser adicionadas em ordem alfabética; use utils/checks.py translation-keys --check.",
   "account_change_password": "Passwort ändern",
   "account_delete_confirm_cta": "Löschung bestätigen",
   "account_delete_confirm_desc": "Gib deine E-Mail zur Bestätigung ein. Diese Aktion kann nicht rückgängig gemacht werden.",

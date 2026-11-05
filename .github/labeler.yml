@@ -2,20 +2,19 @@ ci:
   - changed-files:
       - any-glob-to-any-file:
           - ".github/**"
-backend:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "vectora/backend/**"
-          - "vectora/tests/**"
+          - "utils/**"
 frontend:
   - changed-files:
       - any-glob-to-any-file:
-          - "vectora/frontend/**"
-services:
+          - "src/**"
+          - "messages/**"
+          - "public/**"
+          - "package.json"
+          - "pnpm-lock.yaml"
+docs:
   - changed-files:
       - any-glob-to-any-file:
-          - "services/**"
-company:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "company/**"
+          - "README.md"
+          - "SECURITY.md"
+          - "CONTRIBUTING.md"
+          - ".github/DEPLOYMENT.md"

@@ -1,13 +1,11 @@
 default_stages: [pre-commit]
-minimum_pre_commit_version: 3.0.0
+minimum_pre_commit_version: 4.0.0
 
 exclude: |
   (?x)^(
     \.git/.*|
-    .*\.pdf$|
     .*\.lock$|
-    package-lock\.json|
-    yarn\.lock|
+    .*\.pdf$|
     coverage\..*|
     \.env.*|
     node_modules/.*|
@@ -17,9 +15,6 @@ exclude: |
   )$
 
 repos:
-  # ==========================================
-  # Basic File Validation
-  # ==========================================
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -27,69 +22,66 @@ repos:
         args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
       - id: check-yaml
-        args: ["--allow-multiple-documents", "--unsafe"]
+        args: [--allow-multiple-documents, --unsafe]
       - id: check-json
         exclude: tsconfig.*\.json$
-      - id: check-toml
       - id: check-merge-conflict
       - id: check-added-large-files
-        args: ["--maxkb=5000"]
+        args: [--maxkb=5000]
       - id: detect-private-key
 
-  # ==========================================
-  # Prettier — format TS/TSX/JS/JSON/CSS/MD/YAML
-  # Uses local prettier from node_modules to match pnpm exec prettier behavior
-  # ==========================================
   - repo: local
     hooks:
-      - id: prettier
-        name: Prettier
-        entry: node node_modules/prettier/bin/prettier.cjs --write
-        language: system
-        files: \.(ts|tsx|js|jsx|mjs|cjs|json|css|md|yaml|yml)$
-        types_or: [text]
-
-  # ==========================================
-  # Paraglide — generate i18n types before tsc
-  # ==========================================
-  - repo: local
-    hooks:
-      - id: paraglide-compile
-        name: Generate Paraglide i18n types
-        entry: node node_modules/@inlang/paraglide-js/bin/run.js compile --project ./project.inlang --outdir ./src/paraglide
+      - id: translation-key-order
+        name: Validate translation key order
+        entry: python utils/checks.py translation-keys --check
         language: system
         pass_filenames: false
         always_run: true
-
-  # ==========================================
-  # TypeScript — tsc --noEmit
-  # ==========================================
-  - repo: local
-    hooks:
-      - id: tsc
-        name: TypeScript (tsc --noEmit)
-        entry: node node_modules/typescript/bin/tsc --noEmit
+      - id: removed-path-references
+        name: Reject references to removed or renamed files
+        entry: python utils/checks.py removed-paths
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: no-plan-pr-metadata
+        name: Reject process metadata in source comments
+        entry: python utils/checks.py no-plan
+        language: system
+        types_or: [python, javascript, jsx, ts, tsx]
+      - id: prettier
+        name: Prettier
+        entry: pnpm exec prettier --write
+        language: system
+        files: \.(ts|tsx|js|jsx|mjs|cjs|json|css|md|ya?ml)$
+        types_or: [text]
+      - id: paraglide-compile
+        name: Generate Paraglide i18n types
+        entry: pnpm exec paraglide-js compile --project ./project.inlang --outdir ./src/paraglide
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: typescript
+        name: TypeScript typecheck
+        entry: pnpm run typecheck
         language: system
         files: \.(ts|tsx)$
         pass_filenames: false
-
-  # ==========================================
-  # Oxlint — TypeScript 7-compatible lint
-  # ==========================================
-  - repo: local
-    hooks:
       - id: oxlint
         name: Oxlint
-        entry: pnpm exec oxlint
+        entry: pnpm run lint
         language: system
         files: \.(ts|tsx|js|jsx|mjs|cjs)$
         pass_filenames: false
+      - id: release-lines-config
+        name: Validate release line configuration
+        entry: uv run --with pydantic python utils/release.py line master
+        language: system
+        files: ^\.github/release-lines\.json$
+        pass_filenames: false
 
-  # ==========================================
-  # GitHub Actions Workflow Lint (actionlint)
-  # ==========================================
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.7
+    rev: v1.7.12
     hooks:
       - id: actionlint
         name: Lint GitHub Actions workflows
