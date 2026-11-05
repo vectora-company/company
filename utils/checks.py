@@ -241,17 +241,16 @@ def no_plan_main(argv: list[str]) -> int:
             )
         except (OSError, subprocess.CalledProcessError):
             return 1
-        argv = result.stdout.splitlines()
-    argv = [
-        path
-        for path in argv
-        if path
-        and path
-        not in {
-            "utils/checks.py",
-            "utils/test_checks.py",
-        }
-    ]
+        argv = [
+            path
+            for path in result.stdout.splitlines()
+            if path
+            and path
+            not in {
+                "utils/checks.py",
+                "utils/test_checks.py",
+            }
+        ]
     had_violation = False
     for path in argv:
         for lineno, comment in _find_violations(path):
