@@ -4,4 +4,3 @@
 
 - fix: repair standalone CI and release bootstrap (#3)
 - fix(checks): align the --changed filter with the shared checks.py
-
