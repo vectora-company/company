@@ -35,8 +35,8 @@ Crie branches a partir da linha que receberá a mudança. Use Conventional Commi
 
 Selecione a base e milestone correspondentes à linha:
 
-- `release/0.4` com milestone `0.4` para mudanças destinadas à próxima minor.
-- `master` com milestone `0.3.x` para manutenção da série estável.
+- `release/0.2` com milestone `0.2` para mudanças destinadas à próxima minor.
+- `master` com milestone `0.1.x` para manutenção da série estável.
 
 O workflow valida a combinação. PRs empilhados devem apontar para a base real da stack e usar a milestone correspondente a essa base. O título e a descrição devem explicar o comportamento da mudança, sem referências a planejamento interno ou à ferramenta que a produziu.
 
