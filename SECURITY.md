@@ -18,4 +18,4 @@ A equipe confirmará o recebimento, avaliará a reprodução e o impacto, corrig
 
 ## Versões
 
-Priorize a versão de produção mais recente. A manutenção da série `0.3.x` e a próxima linha `0.4` seguem a configuração em `.github/release-lines.json`; a existência de uma branch não é, por si só, uma garantia de suporte ou SLA.
+Priorize a versão de produção mais recente. A manutenção da série `0.1.x` e a próxima linha `0.2` seguem a configuração em `.github/release-lines.json`; a existência de uma branch não é, por si só, uma garantia de suporte ou SLA.
