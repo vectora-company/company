@@ -7,7 +7,7 @@ export const Route = createFileRoute("/terms")({
       { title: "Termos de Uso — Vectora" },
       {
         property: "og:image",
-        content: `/api/og?title=${encodeURIComponent("Termos de Uso")}&desc=${encodeURIComponent("Licença de uso, planos, cancelamento e limitações do Vectora.")}`,
+        content: `/api/og?title=${encodeURIComponent("Termos de Uso")}&desc=${encodeURIComponent("Licença de uso, assinaturas, cancelamento e limitações do Vectora.")}`,
       },
     ],
   }),
@@ -26,7 +26,7 @@ function TermsPage() {
       <h2>2. Licença</h2>
       <p>
         A Vectora concede uma licença não-exclusiva, intransferível e revogável
-        para usar o software conforme o plano contratado. Redistribuição ou
+        para usar o software conforme a assinatura contratada. Redistribuição ou
         sublicenciamento são proibidos.
       </p>
 
@@ -37,16 +37,16 @@ function TermsPage() {
           Não usar o Vectora para atividades ilegais ou que violem direitos de
           terceiros
         </li>
-        <li>Respeitar os limites de uso da API conforme o plano</li>
+        <li>Respeitar os limites de uso da API conforme a assinatura</li>
       </ul>
 
       <h2>4. Pagamentos e cancelamento</h2>
       <p>
-        O plano Free é gratuito e permanente, sem necessidade de cartão de
-        crédito. Recursos do plano Pro (chat web multi-usuário, storage
+        A assinatura Free é gratuita e permanente, sem necessidade de cartão de
+        crédito. Recursos da assinatura Pro (chat web multi-usuário, storage
         escalável, webhooks, API REST com limite maior) exigem assinatura paga.
         O cancelamento pode ser feito a qualquer momento pelo painel — a conta
-        volta ao plano Free, sem perda de dados locais.
+        volta à assinatura Free, sem perda de dados locais.
       </p>
 
       <h2>5. Limitação de responsabilidade</h2>
@@ -59,9 +59,9 @@ function TermsPage() {
         6. Acordo de nível de serviço (SLA)
       </h2>
       <p>
-        <strong>Suporte</strong> — os tempos de resposta variam por plano: Free
-        recebe email em até 48 horas úteis; Pro recebe email prioritário em até
-        24 horas úteis.
+        <strong>Suporte</strong> — os tempos de resposta variam por assinatura:
+        Free recebe email em até 48 horas úteis; Pro recebe email prioritário em
+        até 24 horas úteis.
       </p>
       <p>
         <strong>Disponibilidade da plataforma de licença</strong> — a Vectora
