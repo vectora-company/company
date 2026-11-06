@@ -30,9 +30,9 @@ da primeira release.
   Actions to create and approve pull requests". Sem isso o Release Please não
   consegue abrir o PR de release.
 - **Label `autorelease: pending`:** criado pelo próprio workflow.
-- **Milestones `0.3.x` e `0.4`:** o workflow `PR Release Milestone` cria o
+- **Milestones `0.1.x` e `0.2`:** o workflow `PR Release Milestone` cria o
   milestone da linha quando ele falta.
-- **Branch `release/0.4`:** é a linha de desenvolvimento definida em
+- **Branch `release/0.2`:** é a linha de desenvolvimento definida em
   `.github/release-lines.json`. Ela precisa existir de antemão; depois da
   primeira release minor a rotação passa a criar a próxima sozinha.
 
