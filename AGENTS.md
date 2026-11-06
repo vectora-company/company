@@ -1,6 +1,6 @@
 # Instruções para agentes
 
-Este repositório contém o site institucional e o dashboard proprietário da Vectora (`vectora.company`), feitos em TypeScript, React, TanStack Start/Router, Vite e Nitro. Não é o monorepo do produto desktop e não contém backend Python, Electron, SCons ou infraestrutura de armazenamento. `services.vectora.company` é uma dependência externa acessada por API, não um diretório deste repositório.
+Este repositório contém o site institucional e o dashboard proprietário da Vectora (`vectora.company`), feitos em TypeScript, React, TanStack Start/Router, Vite e Nitro. Não é o monorepo do produto desktop e não contém backend Python, Electron ou infraestrutura de armazenamento. `services.vectora.company` é uma dependência externa acessada por API, não um diretório deste repositório.
 
 ## Regras de trabalho
 
@@ -19,6 +19,7 @@ Este repositório contém o site institucional e o dashboard proprietário da Ve
 - Node.js 24 e pnpm 11.
 - `pnpm dev` inicia o app local.
 - Os comandos de qualidade são `pnpm run check`, `lint`, `typecheck`, `test` e `build`.
+- `scons` (a partir da raiz) reúne os mesmos fluxos: `scons build`, `scons tests`, `scons coverage`, `scons lint`, `scons format`, `scons update`, `scons clean` e `scons prod` (deploy na Vercel; confere o link do projeto antes).
 - `pre-commit run --all-files` executa os hooks versionados.
 
 Execute os comandos pertinentes às mudanças e informe o resultado. Não apresente testes ignorados como aprovados.
