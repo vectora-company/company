@@ -32,6 +32,6 @@ uv run --with pydantic --with pytest pytest utils/test_checks.py utils/test_rele
 ## Pull requests e commits
 
 - Use Conventional Commits.
-- Respeite as linhas de release definidas em `.github/release-lines.json`: `release/0.4` com milestone `0.4` e `master` com milestone `0.3.x`.
+- Respeite as linhas de release definidas em `.github/release-lines.json`: `release/0.2` com milestone `0.2` e `master` com milestone `0.1.x`.
 - Não inclua no título ou na descrição detalhes de planejamento interno nem atribua a implementação a ferramentas de IA.
 - Mudanças na interface devem incluir traduções em todos os idiomas disponíveis.

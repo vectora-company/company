@@ -52,7 +52,7 @@ O workflow `Company` executa as verificações de frontend, utilitários, build 
 
 ## Releases
 
-As linhas e milestones ficam em `.github/release-lines.json`: `master` mantém a série `0.3.x`, e `release/0.4` recebe o desenvolvimento da próxima minor. `utils/release.py` concentra o cálculo da versão, changelog, seleção da linha e validação de milestone. Consulte [CONTRIBUTING.md](CONTRIBUTING.md) antes de abrir uma pull request.
+As linhas e milestones ficam em `.github/release-lines.json`: `master` mantém a série `0.1.x`, e `release/0.2` recebe o desenvolvimento da próxima minor. `utils/release.py` concentra o cálculo da versão, changelog, seleção da linha e validação de milestone. Consulte [CONTRIBUTING.md](CONTRIBUTING.md) antes de abrir uma pull request.
 
 ## Segurança e licença
 

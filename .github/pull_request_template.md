@@ -4,8 +4,8 @@ Descreva a mudança feita no site institucional, no dashboard ou na integração
 
 Escolha uma base e uma milestone antes de solicitar revisão:
 
-- `release/0.4` + milestone `0.4`: desenvolvimento da próxima minor.
-- `master` + milestone `0.3.x`: manutenção da série `0.3`.
+- `release/0.2` + milestone `0.2`: desenvolvimento da próxima minor.
+- `master` + milestone `0.1.x`: manutenção da série `0.1`.
 
 O CI exige uma milestone compatível com a branch base. PRs empilhados devem usar a milestone da base de destino.
 
