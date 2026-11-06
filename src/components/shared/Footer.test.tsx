@@ -6,7 +6,7 @@
  * deixa de existir. Regressão que travaria se alguém reintroduzisse sem
  * querer.
  */
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import Footer from "./Footer";
@@ -39,6 +39,32 @@ vi.mock("@tanstack/react-router", () => ({
 }));
 
 describe("Footer", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("exibe o ano corrente no copyright", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2031-06-15T12:00:00Z"));
+
+    render(<Footer />);
+
+    expect(screen.getByText(/© 2031 Vectora/)).toBeTruthy();
+  });
+
+  it("recalcula o ano a cada montagem, sem congelá-lo no módulo", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2031-12-31T12:00:00Z"));
+    const first = render(<Footer />);
+    expect(screen.getByText(/© 2031 Vectora/)).toBeTruthy();
+    first.unmount();
+
+    vi.setSystemTime(new Date("2032-01-02T12:00:00Z"));
+    render(<Footer />);
+
+    expect(screen.getByText(/© 2032 Vectora/)).toBeTruthy();
+  });
+
   it("não menciona CNPJ nem CPF no rodapé público", () => {
     render(<Footer />);
 

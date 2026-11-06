@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import { getDocsUrl } from "#/lib/docs-url";
 import Logo from "./Logo";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
+  // Inicializador preguiçoso: o ano é lido uma vez por montagem, fora do
+  // caminho de render puro, e não fica congelado no módulo do servidor.
+  const [year] = useState(() => new Date().getFullYear());
 
   const linkClass = "whitespace-nowrap transition-colors hover:text-foreground";
 
