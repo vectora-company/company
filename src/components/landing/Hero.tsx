@@ -1,6 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Clock } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { m } from "#/paraglide/messages";
 import Logo from "#/components/shared/Logo";
 import { useLatestVersion } from "#/hooks/use-latest-version";
@@ -25,21 +23,7 @@ function Eyebrow() {
 }
 
 export default function Hero() {
-  const [gifFailed, setGifFailed] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
   const { data: latestVersion } = useLatestVersion();
-
-  // O SSR entrega o <img> antes do React hidratar; se o GIF já 404 nesse
-  // meio-tempo, o navegador dispara o "error" nativo antes do onError do
-  // React estar anexado — o listener nunca roda e a imagem quebrada fica
-  // visível pra sempre. `complete && naturalWidth === 0` detecta esse caso
-  // já resolvido no mount, sem depender de o evento disparar de novo.
-  useEffect(() => {
-    const img = imgRef.current;
-    if (img && img.complete && img.naturalWidth === 0) {
-      setGifFailed(true);
-    }
-  }, []);
 
   return (
     <section className="flex flex-col items-center px-4 py-[23px] sm:px-6 lg:px-8">
@@ -95,36 +79,6 @@ export default function Hero() {
           >
             {m.hero_cta_pricing()}
           </Link>
-        </div>
-
-        {/* Imagem hero — borda azul + shadow azul + rounded-3xl */}
-        <div className="w-full pt-5">
-          <div
-            className="overflow-hidden rounded-3xl border border-primary"
-            style={{
-              aspectRatio: "1023 / 358.67",
-              boxShadow:
-                "0px 10px 15px -3px rgba(121,184,255,0.25), 0px 4px 6px -4px rgba(121,184,255,0.25)",
-            }}
-          >
-            {gifFailed ? (
-              <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-card/60 text-muted-foreground">
-                <Clock className="h-6 w-6" />
-                <span className="text-[13px]">{m.showcase_preview_soon()}</span>
-              </div>
-            ) : (
-              <img
-                ref={imgRef}
-                src="/gifs/showcase-chat.gif"
-                alt={m.hero_gif_alt()}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover gif-skeleton"
-                onLoad={(e) => (e.currentTarget.style.background = "none")}
-                onError={() => setGifFailed(true)}
-              />
-            )}
-          </div>
         </div>
       </div>
     </section>
