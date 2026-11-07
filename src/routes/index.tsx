@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import Hero from "#/components/landing/Hero";
-import ShowcaseGifs from "#/components/landing/ShowcaseGifs";
+import OpenSourceSection from "#/components/landing/OpenSourceSection";
 import AgenticFlowSection from "#/components/landing/AgenticFlowSection";
 import CapabilitiesSection from "#/components/landing/CapabilitiesSection";
 import RagFlowSection from "#/components/landing/RagFlowSection";
@@ -99,7 +99,7 @@ function LandingPage() {
   return (
     <>
       <Hero />
-      <ShowcaseGifs />
+      <OpenSourceSection />
       <AgenticFlowSection />
       <CapabilitiesSection />
       <RagFlowSection />
