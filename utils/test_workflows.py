@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-import subprocess
 from pathlib import Path
 
 GITHUB = Path(__file__).resolve().parents[1] / ".github"
@@ -43,50 +42,15 @@ def test_workflows_only_reference_workflow_files_that_exist() -> None:
     assert missing == set()
 
 
-def test_release_workflow_expands_file_lists_through_arrays() -> None:
-    """`$VERSION_FILES` e `$bump_flag` viram vários argumentos: sem aspas ficam
-    sujeitos a globbing e a divisão de palavras; com array, cada um é um item."""
-    release = _read("release-please.yml")
+def test_production_deploy_runs_after_default_branch_validation() -> None:
+    workflow = _read("company.yml")
 
-    unquoted = re.findall(r'(?<!")\$(?:VERSION_FILES|bump_flag)\b', release)
-
-    assert unquoted == []
-    assert '"${release_files[@]}"' in release
-
-
-def test_release_workflow_reads_the_epoch_of_annotated_tags_as_a_single_number() -> (
-    None
-):
-    """O `tag-release` cria tags anotadas. `git show -s --format=%ct <tag>`
-    imprime antes o cabeçalho da tag, e esse texto chega ao `jq --argjson` como
-    JSON inválido. Ler o commit apontado (`^{commit}`) devolve só o número."""
-    release = _read("release-please.yml")
-
-    assert 'git show -s --format=%ct "$latest_tag"' not in release
-    assert 'git log -1 --format=%ct "${latest_tag}^{commit}"' in release
-
-
-def test_epoch_command_of_the_release_workflow_works_with_annotated_tags(
-    tmp_path: Path,
-) -> None:
-    def git(*args: str) -> str:
-        return subprocess.run(
-            ["git", "-c", "user.name=t", "-c", "user.email=t@t", *args],
-            cwd=tmp_path,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout
-
-    git("init", "-q")
-    git("commit", "-q", "--allow-empty", "-m", "chore: base")
-    git("tag", "-a", "v0.1.0", "-m", "Release 0.1.0")
-
-    broken = git("show", "-s", "--format=%ct", "v0.1.0").strip()
-    fixed = git("log", "-1", "--format=%ct", "v0.1.0^{commit}").strip()
-
-    assert not broken.isdigit()
-    assert fixed.isdigit()
+    assert "branches: [master, main]" in workflow
+    assert "needs: validate" in workflow
+    assert "github.ref == 'refs/heads/master'" in workflow
+    assert "github.ref == 'refs/heads/main'" in workflow
+    assert "scons prod" in workflow
+    assert '"projectName":"vectora-company"' in workflow
 
 
 def test_setup_uv_passes_inputs_to_the_script_through_env() -> None:

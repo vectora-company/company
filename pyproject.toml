@@ -6,7 +6,7 @@
 name = "vectora-company-tooling"
 version = "0.0.0"
 requires-python = ">=3.13"
-dependencies = ["pydantic>=2.13.4"]
+dependencies = []
 
 [dependency-groups]
 dev = ["pytest>=9.1.1", "ruff>=0.15.18"]

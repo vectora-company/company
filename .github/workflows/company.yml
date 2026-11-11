@@ -2,14 +2,14 @@ name: Company
 
 on:
   push:
-    branches: [master, "release/**"]
+    branches: [master, main]
   pull_request:
     branches: ["**"]
   workflow_dispatch:
 
 concurrency:
   group: company-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -25,8 +25,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          # The no-plan-comments hook diffs against origin/<PR base>.
-          # A depth-1 checkout of the synthetic merge ref does not create that ref.
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v7
@@ -43,8 +41,8 @@ jobs:
         run: uv tool install pre-commit
       - name: Run repository hooks
         run: pre-commit run --all-files
-      - name: Test release and repository utilities
-        run: uv run --with pydantic --with pytest pytest utils/test_checks.py utils/test_release.py -q
+      - name: Test repository utilities
+        run: uv run --with pytest pytest utils/test_checks.py utils/test_workflows.py -q
       - name: Check formatting
         run: pnpm run check
       - name: Lint
@@ -57,14 +55,21 @@ jobs:
         run: pnpm run build
 
   deploy:
-    name: Deploy production
+    name: Deploy production (Vercel)
     runs-on: ubuntu-24.04
     needs: validate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: >-
+      (github.event_name == 'push' &&
+      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')) ||
+      (github.event_name == 'workflow_dispatch' &&
+      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'))
     environment: Production
     concurrency:
       group: company-production
       cancel-in-progress: false
+    env:
+      VERCEL_ORG_ID: team_QyvhqspWoNomZoPXeilkvq7e
+      VERCEL_PROJECT_ID: prj_cuaZ7zokfupgW2A1FAPwtAMtYGsI
     steps:
       - uses: actions/checkout@v7
         with:
@@ -77,70 +82,21 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Deploy to Vercel
+      - name: Set up Python utilities
+        uses: astral-sh/setup-uv@v10.3.3
+      - name: Link the production Vercel project
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
+          set -euo pipefail
           if [ -z "$VERCEL_TOKEN" ]; then
-            echo "VERCEL_TOKEN is not configured; skipping deployment."
-            exit 0
+            echo "::error::Configure the VERCEL_TOKEN repository secret before deploying."
+            exit 1
           fi
-          pnpm exec vercel --prod --yes --token="$VERCEL_TOKEN"
-
-  tag-release:
-    name: Tag and publish release
-    needs: deploy
-    if: >-
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/master' &&
-      contains(github.event.head_commit.message, 'chore(master): release ')
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write
-      actions: write
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-          # As credenciais permanecem no remote para o `git push` da tag
-          # autenticar com contents: write.
-          token: ${{ github.token }}
-          persist-credentials: true
-      - name: Read released version
-        id: version
-        shell: bash
-        run: |
-          set -euo pipefail
-          version="$(node -p "require('./package.json').version")"
-          test -n "$version"
-          echo "value=$version" >> "$GITHUB_OUTPUT"
-          echo "tag=v$version" >> "$GITHUB_OUTPUT"
-      - name: Create tag after successful deploy
+          mkdir -p .vercel
+          printf '{"projectId":"%s","orgId":"%s","projectName":"vectora-company"}\n' \
+            "$VERCEL_PROJECT_ID" "$VERCEL_ORG_ID" > .vercel/project.json
+      - name: Deploy through the production SCons target
         env:
-          TAG: ${{ steps.version.outputs.tag }}
-          VERSION: ${{ steps.version.outputs.value }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            test "$(git rev-list -n1 "$TAG")" = "$GITHUB_SHA"
-          else
-            git tag -a "$TAG" "$GITHUB_SHA" -m "Vectora Company $VERSION"
-            git push origin "$TAG"
-          fi
-      - name: Create GitHub Release, rotate release lines and prepare the next release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.version.outputs.tag }}
-          VERSION: ${{ steps.version.outputs.value }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release create "$TAG"               --repo "$GITHUB_REPOSITORY"               --target "$GITHUB_SHA"               --title "Vectora Company $VERSION"               --generate-notes
-          fi
-          gh workflow run rotate-release-lines.yml             --repo "$GITHUB_REPOSITORY" --ref master             --field "release_tag=$TAG" --field "target_branch=master"
-          gh workflow run release-please.yml             --repo "$GITHUB_REPOSITORY" --ref master
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: uv tool run --with scons scons prod
