@@ -14,8 +14,18 @@ import {
   syncIssue,
 } from "#/server/fns/admin";
 import { resolveViewerRole } from "#/lib/auth/viewer";
+import {
+  requireProAccount,
+  requireSignedInAccount,
+} from "#/lib/auth/pro-access";
 
 export const Route = createFileRoute("/issues_/$issueId")({
+  beforeLoad: async ({ params }) => {
+    const session = await requireSignedInAccount(`/issues/${params.issueId}`);
+    if (session.role !== "admin") {
+      await requireProAccount(`/issues/${params.issueId}`, session);
+    }
+  },
   head: () => ({
     meta: [{ name: "robots", content: "noindex, nofollow" }],
   }),

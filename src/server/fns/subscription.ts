@@ -20,6 +20,7 @@ export interface Subscription {
   user_id: string;
   tier: "free" | "pro";
   status: string;
+  trial_ends_at: string | null;
   currency: "BRL" | "USD";
   provider: "asaas" | "stripe" | null;
   provider_id: string | null;

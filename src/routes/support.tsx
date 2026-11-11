@@ -46,12 +46,12 @@ const CHANNELS = [
   {
     icon: Mail,
     title: "Email",
-    desc: "Resposta em até 48h (Free) ou 24h (Pro)",
+    desc: "Resposta em até 48h",
     action: {
       label: "support@vectora.company",
       href: "mailto:support@vectora.company",
     },
-    sla: { free: "48h", pro: "24h" },
+    sla: { free: "48h", pro: "48h" },
     badge: null as string | null,
   },
   {

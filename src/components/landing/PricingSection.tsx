@@ -28,12 +28,10 @@ const PRO = {
     m.pricing_feat_everything_free,
     m.pricing_feat_chat_web,
     m.pricing_feat_member_invites,
-    m.pricing_feat_vps_hosting,
-    m.pricing_feat_storage_scalable,
+    m.pricing_feat_hosted_library,
+    m.pricing_feat_hosted_issues,
     m.pricing_feat_webhooks,
     m.pricing_feat_connect,
-    m.pricing_feat_bot_gha,
-    m.pricing_feat_priority_sla,
   ],
 };
 

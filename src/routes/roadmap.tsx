@@ -81,7 +81,6 @@ const PLANNED = [
   { label: "Integração nativa com VS Code e JetBrains via ACP" },
   { label: "SDK Python — pacote PyPI oficial (plugins/extensões do Vectora)" },
   { label: "SDK TypeScript/Node — pacote NPM oficial (plugins/extensões)" },
-  { label: "GitHub Actions integration — run Vectora directly from CI" },
   { label: "n8n workflow nodes" },
   { label: "Kubernetes helm chart" },
   { label: "Audit log completo — todas as ações de usuários e agentes" },
