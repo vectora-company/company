@@ -17,6 +17,8 @@ const FREE = {
     m.pricing_feat_workspace_complete,
     m.pricing_feat_model_routing,
     m.pricing_feat_no_account,
+    m.pricing_feat_self_hosted,
+    m.pricing_feat_operator_storage,
   ],
 };
 
@@ -30,6 +32,7 @@ const PRO = {
     m.pricing_feat_member_invites,
     m.pricing_feat_hosted_library,
     m.pricing_feat_hosted_issues,
+    m.pricing_feat_hosted_extensions,
     m.pricing_feat_webhooks,
     m.pricing_feat_connect,
   ],

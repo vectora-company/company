@@ -2,8 +2,9 @@ import { m } from "#/paraglide/messages";
 import { Server, User, Users, FolderOpen, Check } from "lucide-react";
 
 const EXTRA_BULLETS = [
-  m.team_extra_bullet_storage,
   m.team_extra_bullet_access,
+  m.team_extra_bullet_library,
+  m.team_extra_bullet_issues,
   m.team_extra_bullet_automation,
   m.team_extra_bullet_connect,
 ];
@@ -44,14 +45,10 @@ export default function TeamSetupSection() {
   return (
     <section className="px-4 py-[23px] sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-[1024px] flex-col items-center gap-[22px]">
-        {/* Selo Pro ANTES do título — todo o fluxo abaixo (conta root,
-            convidar equipe) só existe na assinatura paga; sinalizar isso antes
-            dos passos evita o leitor montar o fluxo mental de "como
-            funciona" achando que é Free até só descobrir no bloco final. */}
         <div className="flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
           <span className="text-[12px] font-medium text-primary">
-            {m.team_pro_eyebrow()}
+            {m.team_free_eyebrow()}
           </span>
         </div>
         <h2 className="text-center text-[28px] font-semibold leading-[36px] text-foreground">
@@ -113,9 +110,7 @@ export default function TeamSetupSection() {
           {m.team_compat()}
         </div>
 
-        {/* Reforço do que o Pro entrega além do fluxo de setup acima —
-            eficiência do storage completo, controle de acesso em escala,
-            automação — não é só "sobe mais rápido", é operar diferente. */}
+        {/* Recursos hospedados que dependem do Services e exigem Pro. */}
         <div className="w-full rounded-2xl border border-primary/20 bg-primary/5 p-5">
           <p className="mb-3 text-center text-[15px] font-semibold text-foreground">
             {m.team_extra_heading()}
