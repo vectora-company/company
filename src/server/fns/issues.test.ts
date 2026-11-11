@@ -8,12 +8,14 @@ import {
   joinWaitlist,
 } from "./issues";
 
-const { mockServicesFetch } = vi.hoisted(() => ({
+const { mockServicesFetch, mockGetSessionToken } = vi.hoisted(() => ({
   mockServicesFetch: vi.fn(),
+  mockGetSessionToken: vi.fn(() => undefined),
 }));
 
 vi.mock("#/lib/services/client", () => ({
   servicesFetch: mockServicesFetch,
+  getSessionToken: mockGetSessionToken,
   SERVICES_URL: "https://services.test",
 }));
 
@@ -182,7 +184,7 @@ describe("getIssue", () => {
   });
 
   it("retorna null quando o worker responde 404 (par de erro — id inexistente)", async () => {
-    mockServicesFetch.mockRejectedValue(new Error("services_error_404"));
+    mockServicesFetch.mockRejectedValue(new Error("not_found"));
     await expect(getIssue({ data: { id: "nao-existe" } })).resolves.toBeNull();
   });
 });

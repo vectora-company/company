@@ -21,8 +21,12 @@ import {
 } from "#/lib/issue-files";
 import type { IssueFileError } from "#/lib/issue-files";
 import { toast } from "sonner";
+import { requireProAccount } from "#/lib/auth/pro-access";
 
 export const Route = createFileRoute("/issues")({
+  beforeLoad: async () => {
+    await requireProAccount("/issues");
+  },
   head: () => ({
     meta: [
       { title: m.page_issues_title() },
@@ -37,10 +41,22 @@ export const Route = createFileRoute("/issues")({
   errorComponent: IssuesErrorComponent,
 });
 
-export function IssuesErrorComponent() {
+export function IssuesErrorComponent({ error }: { error?: unknown } = {}) {
+  const proRequired =
+    error instanceof Error && error.message === "pro_required";
   return (
     <Container size="prose" className="py-16 text-center">
-      <p className="text-sm text-muted-foreground">{m.error_generic()}</p>
+      <p className="text-sm text-muted-foreground">
+        {proRequired ? m.issues_pro_required() : m.error_generic()}
+      </p>
+      {proRequired && (
+        <Link
+          to="/dashboard/billing"
+          className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground"
+        >
+          {m.nav_billing()}
+        </Link>
+      )}
     </Container>
   );
 }

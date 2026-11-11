@@ -1,6 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { SERVICES_URL, servicesFetch } from "#/lib/services/client";
+import {
+  getSessionToken,
+  SERVICES_URL,
+  servicesFetch,
+} from "#/lib/services/client";
 
 const IssueSchema = z.object({
   title: z.string().min(3).max(200),
@@ -46,8 +50,12 @@ export const submitIssueWithFiles = createServerFn({ method: "POST" })
     // fetch direto (não servicesFetch): o Content-Type multipart com boundary
     // é gerado pelo fetch a partir do FormData — forçar application/json
     // corromperia o corpo.
+    const sessionToken = getSessionToken();
     const res = await fetch(`${SERVICES_URL}/issues`, {
       method: "POST",
+      headers: sessionToken
+        ? { Authorization: `Bearer ${sessionToken}` }
+        : undefined,
       body: data,
     });
     const body = (await res.json().catch(() => ({}))) as {
@@ -109,7 +117,10 @@ export const getIssue = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<IssueDetail | null> => {
     const item = await servicesFetch<
       Omit<IssueDetail, "files"> & { files?: string[] }
-    >(`/issues/${encodeURIComponent(data.id)}`).catch(() => null);
+    >(`/issues/${encodeURIComponent(data.id)}`).catch((error: unknown) => {
+      if (error instanceof Error && error.message === "not_found") return null;
+      throw error;
+    });
     if (!item) return null;
     return {
       ...item,

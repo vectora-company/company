@@ -9,7 +9,6 @@ import {
   HelpCircle,
   ShieldCheck,
   LogOut,
-  Bot,
 } from "lucide-react";
 import Logo from "#/components/shared/Logo";
 import ThemeToggle from "#/components/shared/ThemeToggle";
@@ -40,12 +39,6 @@ const NAV_ITEMS = [
     exact: false,
     icon: User,
     label: m.nav_account,
-  },
-  {
-    to: "/dashboard/gh-bot" as const,
-    exact: false,
-    icon: Bot,
-    label: m.nav_gh_bot,
   },
   {
     to: "/support" as const,
@@ -118,7 +111,7 @@ export default function Sidebar() {
         </button>
       </aside>
 
-      {/* Mobile bottom tab bar (first 5 items only — gh-bot/support excluded) */}
+      {/* Mobile bottom tab bar (first 5 items only — support excluded) */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border bg-background/95 backdrop-blur flex">
         {NAV_ITEMS.slice(0, 5).map((item) => {
           const active = item.exact
