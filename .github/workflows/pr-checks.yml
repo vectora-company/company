@@ -1,26 +1,13 @@
 name: PR Checks
 
-# Roda em todo PR contra uma linha de desenvolvimento suportada e valida que
-# o TÍTULO do PR segue
-# Conventional Commits — o título vira o commit de squash-merge, que
-# release-please.yml lê pra decidir o bump de versão e a seção do
-# CHANGELOG.md. Um título malformado quebra essa automação em silêncio, daí
-# o gate aqui, não só cosmético. Mesmo padrão de
+# Valida que o TÍTULO do PR segue Conventional Commits para manter o histórico
+# de merge legível. O deploy de produção acontece só depois que a mudança entra
+# em master ou main. Mesmo padrão de
 # lancedb/.github/workflows/dev.yml.
 
 on:
   pull_request:
-    types:
-      [
-        opened,
-        edited,
-        synchronize,
-        reopened,
-        milestoned,
-        demilestoned,
-        labeled,
-        unlabeled,
-      ]
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
     branches: ["**"]
 
 concurrency:
@@ -31,8 +18,8 @@ permissions:
   contents: read
 
 jobs:
-  migration-tests:
-    name: Testes das linhas de release
+  repository-tests:
+    name: Repository tooling tests
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -43,9 +30,8 @@ jobs:
           python-version: "3.13"
           all-extras: "false"
           working-directory: .
-      - name: Executa testes das utilidades de release
-        run: >-
-          uv run pytest -q utils/test_release.py utils/test_checks.py
+      - name: Run repository utility tests
+        run: uv run pytest -q utils/test_checks.py utils/test_workflows.py
 
   commitlint:
     name: Verify PR title (Conventional Commits)
@@ -87,7 +73,7 @@ jobs:
             const message = [
               "**Título do PR fora do padrão**",
               "",
-              "Este repositório segue [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): o título do PR vira o commit de squash-merge e alimenta o versionamento e o changelog automáticos (release-please).",
+              "Este repositório usa [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) para manter títulos e histórico de merge consistentes.",
               "",
               "Exemplos válidos: `feat: adiciona X`, `fix(updates): corrige Y`, `docs: atualiza Z`.",
               "",

@@ -33,18 +33,21 @@ Ao corrigir um defeito, inclua uma regressão que falhe antes da correção e ve
 
 Crie branches a partir da linha que receberá a mudança. Use Conventional Commits, por exemplo `fix: correct account error message`, `feat: add billing history filter` ou `docs: clarify local setup`.
 
-Selecione a base e milestone correspondentes à linha:
-
-- `release/0.2` com milestone `0.2` para mudanças destinadas à próxima minor.
-- `master` com milestone `0.1.x` para manutenção da série estável.
-
-O workflow valida a combinação. PRs empilhados devem apontar para a base real da stack e usar a milestone correspondente a essa base. O título e a descrição devem explicar o comportamento da mudança, sem referências a planejamento interno ou à ferramenta que a produziu.
+Abra PR para a branch principal apropriada (`master` ou `main`) e mantenha PRs
+empilhados apontados para a base real da stack. O CI valida cada PR; depois do
+merge, o workflow publica automaticamente em produção após todas as validações.
+Não são usados milestones nem Release Please. O título e a descrição devem
+explicar o comportamento da mudança, sem referências a planejamento interno ou
+à ferramenta que a produziu.
 
 Descreva o problema, a solução, os riscos e como validou. Não afirme que uma integração externa está funcionando se ela não foi exercitada. Não faça merge de sua própria PR.
 
-## Release e versões
+## Deploy e versões
 
-`.github/release-lines.json` é a fonte de branches, milestones e arquivos de versão. O script `utils/release.py` implementa o plano e a validação; não mantenha manifestos duplicados. Mudanças na política de release precisam atualizar os testes do script e o workflow correspondente.
+O workflow `Company` valida PRs e, após merge em `master` ou `main`, executa
+`uv tool run --with scons scons prod` para publicar na Vercel. Configure
+`VERCEL_TOKEN` como secret do repositório ou do Environment `Production`.
+Milestones e Release Please não fazem parte do fluxo.
 
 ## Licença e contribuições
 

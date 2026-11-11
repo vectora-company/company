@@ -75,13 +75,6 @@ repos:
         language: system
         files: \.(py|ts|tsx|js|jsx|mts)$
         exclude: ^utils/(checks|test_checks)\.py$
-      - id: release-lines-config
-        name: Validate release line configuration
-        entry: uv run python utils/release.py line master
-        language: system
-        files: ^\.github/release-lines\.json$
-        pass_filenames: false
-
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.20
     hooks:
