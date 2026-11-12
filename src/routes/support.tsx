@@ -11,7 +11,7 @@ export const Route = createFileRoute("/support")({
       { title: m.page_support_title() },
       {
         property: "og:image",
-        content: `/api/og?title=${encodeURIComponent(m.page_support_title())}&desc=${encodeURIComponent("Email, issues pelo site e documentação. Suporte rápido para seu Vectora.")}`,
+        content: `/api/og?title=${encodeURIComponent(m.page_support_title())}&desc=${encodeURIComponent("Email, issues no GitHub e documentação. Suporte rápido para seu Vectora.")}`,
       },
     ],
     scripts: [
