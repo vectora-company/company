@@ -9,7 +9,7 @@ Este é um repositório independente do aplicativo desktop Vectora. O código e 
 - Páginas públicas de apresentação, recursos, downloads, FAQ, suporte, roadmap e informações legais.
 - Fluxos de login, cadastro e autorização de dispositivo.
 - Dashboard de conta, licença, billing e chaves de API.
-- Formulários de suporte e issues enviados à API de serviços.
+- Suporte por e-mail e issues no GitHub do projeto.
 - Renderização web com TanStack Start, React e Vite; funções de servidor validam entradas com Zod e encaminham chamadas autenticadas à API.
 
 As páginas e integrações podem mudar conforme a versão publicada. O código desta branch é a fonte para o comportamento implementado.

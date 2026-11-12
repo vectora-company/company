@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { m } from "#/paraglide/messages";
 import Turnstile from "#/components/shared/Turnstile";
-import { joinWaitlist } from "#/server/fns/issues";
+import { joinWaitlist } from "#/server/fns/waitlist";
 import { track } from "#/lib/analytics/plausible";
 
 export default function WaitlistCta() {
