@@ -7,10 +7,6 @@ import {
   deactivateCoupon,
   listGifts,
   createGift,
-  listIssuesAdmin,
-  getIssueAdmin,
-  respondToIssue,
-  archiveIssue,
 } from "./admin";
 
 const { mockServicesFetch } = vi.hoisted(() => ({
@@ -132,74 +128,5 @@ describe("createGift", () => {
     await expect(
       createGift({ data: { email: "lifetime@example.com" } }),
     ).resolves.toMatchObject({ claimed: true });
-  });
-});
-
-describe("listIssuesAdmin", () => {
-  it("chama /admin/issues sem query string quando limit/offset não são passados", async () => {
-    mockServicesFetch.mockResolvedValue({ issues: [] });
-    await listIssuesAdmin({ data: {} });
-    expect(mockServicesFetch).toHaveBeenCalledWith("/admin/issues");
-  });
-
-  it("monta a query string com limit/offset quando fornecidos", async () => {
-    mockServicesFetch.mockResolvedValue({ issues: [] });
-    await listIssuesAdmin({ data: { limit: 20, offset: 40 } });
-    expect(mockServicesFetch).toHaveBeenCalledWith(
-      "/admin/issues?limit=20&offset=40",
-    );
-  });
-});
-
-describe("getIssueAdmin", () => {
-  it("busca uma issue pelo id, com email exposto (admin only)", async () => {
-    mockServicesFetch.mockResolvedValue({
-      id: "i1",
-      email: "reporter@example.com",
-    });
-    const result = await getIssueAdmin({ data: { id: "i1" } });
-    expect(result).toMatchObject({ email: "reporter@example.com" });
-    expect(mockServicesFetch).toHaveBeenCalledWith("/admin/issues/i1");
-  });
-});
-
-describe("respondToIssue", () => {
-  it("envia a resposta e a flag de resolução", async () => {
-    mockServicesFetch.mockResolvedValue({ ok: true });
-    await respondToIssue({
-      data: { id: "i1", response: "Já corrigimos!", resolve: true },
-    });
-    expect(mockServicesFetch).toHaveBeenCalledWith(
-      "/admin/issues/i1/respond",
-      expect.objectContaining({ method: "POST" }),
-    );
-  });
-
-  it("rejeita resposta com menos de 3 caracteres antes de bater na rede (edge — validação Zod)", async () => {
-    await expect(
-      respondToIssue({ data: { id: "i1", response: "ok" } }),
-    ).rejects.toBeTruthy();
-    expect(mockServicesFetch).not.toHaveBeenCalled();
-  });
-});
-
-describe("archiveIssue", () => {
-  it("envia o toggle de arquivamento", async () => {
-    mockServicesFetch.mockResolvedValue({ ok: true });
-    await archiveIssue({ data: { id: "i1", archived: true } });
-    expect(mockServicesFetch).toHaveBeenCalledWith(
-      "/admin/issues/i1/archive",
-      expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify({ archived: true }),
-      }),
-    );
-  });
-
-  it("rejeita id vazio antes de bater na rede (edge — validação Zod)", async () => {
-    await expect(
-      archiveIssue({ data: { id: "", archived: true } }),
-    ).rejects.toBeTruthy();
-    expect(mockServicesFetch).not.toHaveBeenCalled();
   });
 });

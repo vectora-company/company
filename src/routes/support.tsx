@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import { Mail, BookOpen, Users, MessageCircle, FileText } from "lucide-react";
 import Container from "#/components/shared/Container";
@@ -95,8 +95,10 @@ function SupportPage() {
       />
 
       <div className="mb-8 mt-10">
-        <Link
-          to="/issues"
+        <a
+          href="https://github.com/vectora-company/vectora/issues"
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex w-full items-center justify-between rounded-xl border border-primary/40 bg-primary/10 px-5 py-4 text-start transition-all hover:border-primary/60 hover:bg-primary/15"
         >
           <div className="flex items-center gap-3">
@@ -108,12 +110,12 @@ function SupportPage() {
                 Reportar bug ou sugerir feature
               </p>
               <p className="text-sm text-muted-foreground">
-                Abra um issue diretamente pelo site — sem precisar de GitHub
+                Abra uma issue no GitHub do projeto
               </p>
             </div>
           </div>
           <span className="ms-4 shrink-0 text-primary">→</span>
-        </Link>
+        </a>
       </div>
 
       <div className="space-y-3">

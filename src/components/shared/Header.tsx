@@ -70,12 +70,14 @@ export default function Header({ session }: { session: SessionUser | null }) {
           >
             {m.nav_faq()}
           </Link>
-          <Link
-            to="/issues"
-            className="text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
+          <a
+            href="https://github.com/vectora-company/vectora/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground transition-colors hover:text-foreground"
           >
             {m.nav_issues()}
-          </Link>
+          </a>
           <Link
             to="/downloads"
             className="text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
@@ -198,13 +200,15 @@ export default function Header({ session }: { session: SessionUser | null }) {
             >
               {m.nav_faq()}
             </Link>
-            <Link
-              to="/issues"
+            <a
+              href="https://github.com/vectora-company/vectora/issues"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground data-[status=active]:bg-muted data-[status=active]:text-foreground"
+              className="rounded-xl px-3 py-2.5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
             >
               {m.nav_issues()}
-            </Link>
+            </a>
             <Link
               to="/downloads"
               onClick={() => setMobileOpen(false)}

@@ -46,7 +46,6 @@ const SHIPPED = [
   { label: "Autenticação + billing (Stripe INTL + Asaas BR)" },
   { label: "VECTORA_TOKEN — recuperável a qualquer momento, com rotação" },
   { label: "Suporte multi-idioma — 7 locales (pt, en, es, fr, it, de, ru)" },
-  { label: "Sistema de issues e feedback pelo site" },
   { label: "Webhooks de billing com Stripe e Asaas" },
   { label: "GDPR — exportação de dados e exclusão de conta em 30 dias" },
   {

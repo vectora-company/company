@@ -4,7 +4,6 @@ import {
   Key,
   Shield,
   CreditCard,
-  Zap,
   User,
   HelpCircle,
   ShieldCheck,
@@ -27,12 +26,6 @@ const NAV_ITEMS = [
     exact: false,
     icon: CreditCard,
     label: m.nav_billing,
-  },
-  {
-    to: "/dashboard/api-keys" as const,
-    exact: false,
-    icon: Zap,
-    label: m.nav_api_keys,
   },
   {
     to: "/dashboard/account" as const,

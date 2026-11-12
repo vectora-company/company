@@ -57,9 +57,14 @@ export default function Footer() {
             <Link to="/support" className={linkClass}>
               {m.nav_support()}
             </Link>
-            <Link to="/issues" className={linkClass}>
+            <a
+              href="https://github.com/vectora-company/vectora/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
               {m.nav_issues()}
-            </Link>
+            </a>
           </div>
         </div>
 
