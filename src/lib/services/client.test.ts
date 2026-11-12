@@ -115,7 +115,7 @@ describe("servicesFetch", () => {
     mockGetCookie.mockReturnValue(undefined);
     FETCH_MOCK.mockResolvedValueOnce(mockOk({ data: 1 }));
 
-    await servicesFetch("/issues");
+    await servicesFetch("/profile/update");
 
     const [, init] = FETCH_MOCK.mock.calls[0];
     const headers = init.headers as Headers;

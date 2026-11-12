@@ -7,7 +7,7 @@ export default function OpenSourceSection() {
     {
       Icon: Code2,
       label: m.opensource_repository_link,
-      href: "https://github.com/vectora-ltda/vectora",
+      href: "https://github.com/vectora-company/vectora",
     },
     {
       Icon: BookOpen,

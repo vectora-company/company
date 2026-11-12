@@ -9,7 +9,7 @@ Este é um repositório independente do aplicativo desktop Vectora. O código e 
 - Páginas públicas de apresentação, recursos, downloads, FAQ, suporte, roadmap e informações legais.
 - Fluxos de login, cadastro e autorização de dispositivo.
 - Dashboard de conta, licença, billing e chaves de API.
-- Formulários de suporte e issues enviados à API de serviços.
+- Suporte por e-mail e issues no GitHub do projeto.
 - Renderização web com TanStack Start, React e Vite; funções de servidor validam entradas com Zod e encaminham chamadas autenticadas à API.
 
 As páginas e integrações podem mudar conforme a versão publicada. O código desta branch é a fonte para o comportamento implementado.
@@ -27,7 +27,7 @@ O cookie de sessão é HttpOnly e o cliente de serviços fica centralizado em `s
 
 ## Desenvolvimento local
 
-Requisitos: Node.js 24, pnpm 11 e `uv` para utilitários de release e testes Python auxiliares.
+Requisitos: Node.js 24, pnpm 11 e `uv` para utilitários e testes Python auxiliares.
 
 ```bash
 pnpm install --frozen-lockfile
@@ -48,11 +48,14 @@ pnpm run build
 pre-commit run --all-files
 ```
 
-O workflow `Company` executa as verificações de frontend, utilitários, build e, em pushes na branch principal, o deploy de produção quando o secret de deploy está configurado.
+O workflow `Company` valida cada PR e, após merge em `master` ou `main`, publica na Vercel pelo alvo de produção SCons. O deploy exige `VERCEL_TOKEN` no Environment `Production`.
 
-## Releases
+## Deploy e versões
 
-As linhas e milestones ficam em `.github/release-lines.json`: `master` mantém a série `0.1.x`, e `release/0.2` recebe o desenvolvimento da próxima minor. `utils/release.py` concentra o cálculo da versão, changelog, seleção da linha e validação de milestone. Consulte [CONTRIBUTING.md](CONTRIBUTING.md) antes de abrir uma pull request.
+Não há milestones ou automação Release Please. Cada PR passa pelas validações;
+merges nas branches `master` ou `main` publicam automaticamente a versão
+validada na Vercel. Consulte [CONTRIBUTING.md](CONTRIBUTING.md) e
+[`.github/DEPLOYMENT.md`](.github/DEPLOYMENT.md).
 
 ## Segurança e licença
 
