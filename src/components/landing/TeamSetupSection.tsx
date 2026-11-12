@@ -4,7 +4,6 @@ import { Server, User, Users, FolderOpen, Check } from "lucide-react";
 const EXTRA_BULLETS = [
   m.team_extra_bullet_access,
   m.team_extra_bullet_library,
-  m.team_extra_bullet_issues,
   m.team_extra_bullet_automation,
   m.team_extra_bullet_connect,
 ];
