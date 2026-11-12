@@ -30,8 +30,6 @@ const PRO = {
     m.pricing_feat_everything_free,
     m.pricing_feat_chat_web,
     m.pricing_feat_member_invites,
-    m.pricing_feat_hosted_library,
-    m.pricing_feat_hosted_extensions,
     m.pricing_feat_webhooks,
     m.pricing_feat_connect,
   ],
