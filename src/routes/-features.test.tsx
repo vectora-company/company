@@ -160,6 +160,12 @@ describe("getFeatureCategories", () => {
       expect(sandbox, locale).toContain("bwrap");
       expect(sandbox.toLowerCase(), locale).toContain("soft");
       expect(sandbox, locale).toContain("enabled = false");
+      expect(messages.features_sandbox_summary, locale).not.toBe(sandbox);
+      expect(messages.features_sandbox_summary.length, locale).toBeLessThan(
+        sandbox.length / 2,
+      );
+      expect(messages.features_native_media_summary, locale).toContain("PDF");
+      expect(messages.features_native_media_desc, locale).toContain("PDF");
       const lab = messages.features_verification_lab_desc;
       const privacyWords: Record<string, string> = {
         en: "private code",
