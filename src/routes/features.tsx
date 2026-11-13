@@ -166,7 +166,7 @@ export function getFeatureCategories(): Category[] {
           id: "sandbox",
           Icon: ShieldCheck,
           title: m.capability_sandbox_title(),
-          summary: m.capability_sandbox_desc(),
+          summary: m.features_sandbox_summary(),
           description: m.features_sandbox_desc(),
         },
         {
