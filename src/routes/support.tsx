@@ -44,16 +44,6 @@ export const Route = createFileRoute("/support")({
 
 const CHANNELS = [
   {
-    icon: Mail,
-    title: "Email",
-    desc: m.support_email_desc(),
-    action: {
-      label: "support@vectora.company",
-      href: "mailto:support@vectora.company",
-    },
-    badge: null as string | null,
-  },
-  {
     icon: Users,
     title: "Discord",
     desc: "Comunidade ativa de usuários. Tire dúvidas, compartilhe casos de uso e acompanhe novidades.",
@@ -71,6 +61,16 @@ const CHANNELS = [
 
 function SupportPage() {
   const channels = [
+    {
+      icon: Mail,
+      title: "Email",
+      desc: m.support_email_desc(),
+      action: {
+        label: "support@vectora.company",
+        href: "mailto:support@vectora.company",
+      },
+      badge: null as string | null,
+    },
     ...CHANNELS,
     {
       icon: BookOpen,
