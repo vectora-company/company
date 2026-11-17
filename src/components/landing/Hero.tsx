@@ -72,6 +72,26 @@ export default function Hero() {
               </span>
             )}
           </Link>
+          <a
+            href="https://github.com/vectora-company/vectora"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub Vectora"
+            title="GitHub"
+            className="flex h-[42px] items-center justify-center gap-2 rounded-2xl border border-border bg-card/50 px-4 text-sm font-semibold text-foreground/90 transition-colors hover:border-primary"
+          >
+            <img
+              src="/github-black.svg"
+              alt=""
+              className="h-4 w-4 dark:hidden"
+            />
+            <img
+              src="/github-white.svg"
+              alt=""
+              className="hidden h-4 w-4 dark:block"
+            />
+            GitHub
+          </a>
           <Link
             to="/"
             hash="pricing"

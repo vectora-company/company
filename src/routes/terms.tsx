@@ -55,14 +55,9 @@ function TermsPage() {
         de dados, interrupções de serviço ou danos indiretos decorrentes do uso.
       </p>
 
-      <h2 id="acordo-de-nivel-de-servico-sla">
-        6. Acordo de nível de serviço (SLA)
+      <h2 id="disponibilidade-da-plataforma">
+        6. Disponibilidade da plataforma
       </h2>
-      <p>
-        <strong>Suporte</strong> — os tempos de resposta variam por assinatura:
-        Free recebe email em até 48 horas úteis; Pro recebe email prioritário em
-        até 24 horas úteis.
-      </p>
       <p>
         <strong>Disponibilidade da plataforma de licença</strong> — a Vectora
         garante 99,5% de uptime mensal para os serviços de autenticação, licença
