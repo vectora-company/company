@@ -80,6 +80,7 @@ jobs:
           mkdir -p .upstream/vectora/frontend
           base="https://raw.githubusercontent.com/vectora-company/vectora/master"
           if ! curl --fail --silent --show-error --location --retry 3 "$base/ROADMAP.md" -o .upstream/vectora/ROADMAP.md; then
+            rm -f .upstream/vectora/ROADMAP.md
             echo "::warning::ROADMAP.md ainda não está no branch principal; será usada a cópia versionada da Company."
           fi
           curl --fail --silent --show-error --location --retry 3 "$base/CHANGELOG.md" -o .upstream/vectora/CHANGELOG.md
