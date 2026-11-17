@@ -70,14 +70,12 @@ export default function Header({ session }: { session: SessionUser | null }) {
           >
             {m.nav_faq()}
           </Link>
-          <a
-            href="https://github.com/vectora-company/vectora/issues"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/support"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
-            {m.nav_issues()}
-          </a>
+            {m.nav_support()}
+          </Link>
           <Link
             to="/downloads"
             className="text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
@@ -88,6 +86,25 @@ export default function Header({ session }: { session: SessionUser | null }) {
 
         {/* ── Ações (direita) ── */}
         <div className="flex items-center gap-4">
+          <a
+            href="https://github.com/vectora-company/vectora"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub Vectora"
+            title="GitHub"
+            className={`h-[34px] w-[34px] text-foreground transition-colors hover:opacity-75 ${pill}`}
+          >
+            <img
+              src="/github-black.svg"
+              alt=""
+              className="h-4 w-4 dark:hidden"
+            />
+            <img
+              src="/github-white.svg"
+              alt=""
+              className="hidden h-4 w-4 dark:block"
+            />
+          </a>
           {/* Locale dropdown (só desktop) */}
           <div ref={localeRef} className="relative hidden md:block">
             <button
@@ -200,14 +217,21 @@ export default function Header({ session }: { session: SessionUser | null }) {
             >
               {m.nav_faq()}
             </Link>
+            <Link
+              to="/support"
+              onClick={() => setMobileOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {m.nav_support()}
+            </Link>
             <a
-              href="https://github.com/vectora-company/vectora/issues"
+              href="https://github.com/vectora-company/vectora"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
             >
-              {m.nav_issues()}
+              GitHub
             </a>
             <Link
               to="/downloads"

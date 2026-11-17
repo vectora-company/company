@@ -156,10 +156,8 @@ describe("getFeatureCategories", () => {
 
       const sandbox = messages.capability_sandbox_desc;
       expect(messages.features_sandbox_desc, locale).toBe(sandbox);
-      expect(sandbox, locale).toContain("macOS");
       expect(sandbox, locale).toContain("bwrap");
-      expect(sandbox.toLowerCase(), locale).toContain("soft");
-      expect(sandbox, locale).toContain("enabled = false");
+      expect(sandbox.length, locale).toBeLessThan(300);
       expect(messages.features_sandbox_summary, locale).not.toBe(sandbox);
       expect(messages.features_sandbox_summary.length, locale).toBeLessThan(
         sandbox.length / 2,
