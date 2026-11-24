@@ -1,8 +1,9 @@
 import { ExternalLink, BookOpen, Code2, Sparkles } from "lucide-react";
 import { m } from "#/paraglide/messages";
-import { getDocsUrl } from "#/lib/docs-url";
+import { useLatestRelease } from "#/hooks/use-latest-version";
 
 export default function OpenSourceSection() {
+  const { data: release } = useLatestRelease();
   const links = [
     {
       Icon: Code2,
@@ -11,8 +12,12 @@ export default function OpenSourceSection() {
     },
     {
       Icon: BookOpen,
-      label: m.opensource_docs_link,
-      href: getDocsUrl("guides/release-0.1.24"),
+      label: release
+        ? () => m.opensource_release_link({ version: release.version })
+        : m.opensource_releases_link,
+      href:
+        release?.url ??
+        "https://github.com/vectora-company/vectora/releases/latest",
     },
     {
       Icon: Sparkles,
