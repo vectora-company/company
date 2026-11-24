@@ -29,6 +29,14 @@ const release = {
     },
   ],
 };
+const githubRelease = {
+  tag_name: "v0.1.25",
+  html_url: release.url,
+  assets: release.assets.map(({ name, url }) => ({
+    name,
+    browser_download_url: url,
+  })),
+};
 
 beforeEach(() => {
   fetchMock.mockReset();
@@ -40,18 +48,26 @@ afterEach(() => {
 });
 
 describe("latest GitHub release hooks", () => {
-  it("loads release metadata from the same-origin endpoint", async () => {
-    fetchMock.mockResolvedValue({ ok: true, json: async () => release });
+  it("loads and normalizes release metadata from GitHub", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => githubRelease });
     const { wrapper } = makeWrapper();
     const { result } = renderHook(() => useLatestRelease(), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data).toEqual(release);
-    expect(fetchMock).toHaveBeenCalledWith("/api/releases/latest");
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://api.github.com/repos/vectora-company/vectora/releases/latest",
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      },
+    );
   });
 
   it("selects the latest version for the landing page badge", async () => {
-    fetchMock.mockResolvedValue({ ok: true, json: async () => release });
+    fetchMock.mockResolvedValue({ ok: true, json: async () => githubRelease });
     const { wrapper } = makeWrapper();
     const { result } = renderHook(() => useLatestVersion(), { wrapper });
 
