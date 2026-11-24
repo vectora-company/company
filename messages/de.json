@@ -103,8 +103,6 @@
   "downloads_install_windows": "Führen Sie die .exe aus und folgen Sie dem Installer. Falls Windows SmartScreen warnt, klicken Sie auf \"Weitere Informationen\" → \"Trotzdem ausführen\" (üblich bei neuen Apps, bis das Zertifikat an Reputation gewinnt). Lieber eine stille Installation? Verwenden Sie Vectora-Setup.exe /S. Die .msi integriert sich in Apps & Features.",
   "downloads_other_variants": "Andere Versionen",
   "downloads_recommended": "Empfohlen",
-  "downloads_release_loading": "Die neuesten Downloads werden geladen …",
-  "downloads_release_unavailable": "Downloads sind derzeit nicht verfügbar. Alle Dateien finden Sie in den GitHub-Versionen.",
   "error_duplicate_waitlist": "Diese E-Mail ist bereits auf der Warteliste.",
   "error_email_already_used": "Diese E-Mail hat bereits ein Konto.",
   "error_email_not_confirmed": "E-Mail nicht bestätigt. Überprüfe dein Postfach.",

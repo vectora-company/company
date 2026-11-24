@@ -103,8 +103,6 @@
   "downloads_install_windows": "Запустите .exe и следуйте инструкциям установщика. Если Windows SmartScreen выдаст предупреждение, нажмите «Подробнее» → «Выполнить в любом случае» (обычное дело для новых приложений, пока сертификат не наберёт репутацию). Нужна тихая установка? Используйте Vectora-Setup.exe /S. Файл .msi интегрируется с «Приложения и возможности».",
   "downloads_other_variants": "Другие версии",
   "downloads_recommended": "Рекомендуется",
-  "downloads_release_loading": "Загрузка последних версий…",
-  "downloads_release_unavailable": "Загрузки временно недоступны. Все файлы доступны в релизах GitHub.",
   "error_duplicate_waitlist": "Этот email уже в списке ожидания.",
   "error_email_already_used": "Этот email уже зарегистрирован.",
   "error_email_not_confirmed": "Email не подтверждён. Проверьте входящие сообщения.",
