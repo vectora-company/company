@@ -1,30 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 
-// Mesmo worker que resolve o download de "latest" (services/src/updates/worker.ts)
-// — o número de versão exibido no site nunca é hardcoded, vem do mesmo canal
-// que decide qual binário `/download/latest/...` de fato serve.
-const UPDATE_SERVER = "https://services.vectora.company";
-
 export const LATEST_VERSION_QUERY_KEY = ["latest-version"] as const;
 
-interface VersionResponse {
+export interface LatestRelease {
   version: string;
-  channel: string;
+  url: string;
+  releases_url: string;
+  assets: Array<{ name: string; url: string }>;
 }
 
-async function fetchLatestVersion(channel: string): Promise<string | null> {
-  const res = await fetch(`${UPDATE_SERVER}/version/${channel}`);
-  if (!res.ok) return null;
-  const data = (await res.json()) as VersionResponse;
-  return data.version;
+async function fetchLatestRelease(): Promise<LatestRelease | null> {
+  const response = await fetch("/api/releases/latest");
+  if (!response.ok) return null;
+  return (await response.json()) as LatestRelease;
 }
 
-/** Versão atual do canal "latest" — null se a API estiver fora do ar ou sem
- * versão publicada ainda; nunca lança (degrada escondendo o badge). */
-export function useLatestVersion(channel = "latest") {
+/** Release publicada mais recente; null quando GitHub estiver indisponível. */
+export function useLatestRelease() {
   return useQuery({
-    queryKey: [...LATEST_VERSION_QUERY_KEY, channel],
-    queryFn: () => fetchLatestVersion(channel),
+    queryKey: LATEST_VERSION_QUERY_KEY,
+    queryFn: fetchLatestRelease,
+    staleTime: 5 * 60_000,
+    retry: 1,
+  });
+}
+
+/** Versão da release publicada mais recente para badges da interface. */
+export function useLatestVersion() {
+  return useQuery({
+    queryKey: LATEST_VERSION_QUERY_KEY,
+    queryFn: fetchLatestRelease,
+    select: (release) => release?.version ?? null,
     staleTime: 5 * 60_000,
     retry: 1,
   });

@@ -28,7 +28,7 @@ repos:
   # Node dos hooks vem de default_language_version.
   # ==========================================================================
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.27
+    rev: 0.13.9
     hooks:
       - id: uv-lock
 
@@ -76,7 +76,7 @@ repos:
         files: \.(py|ts|tsx|js|jsx|mts)$
         exclude: ^utils/(checks|test_checks)\.py$
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.20
+    rev: v0.17.6
     hooks:
       - id: ruff
         name: Ruff Lint (Python)
