@@ -1,5 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { detectOS, downloadHref, PLATFORMS } from "./downloads";
+import { detectOS, resolveDownloadPlatforms } from "../lib/download-assets";
+import type { LatestRelease } from "../hooks/use-latest-version";
 
 // detectOS mapeia o userAgent → plataforma para destacar o download recomendado.
 function setUA(ua: string): void {
@@ -34,64 +35,56 @@ describe("detectOS", () => {
   });
 });
 
-describe("download matrix", () => {
-  it("exposes both Windows installers for x64 and ARM64", () => {
-    const windows = PLATFORMS.find((platform) => platform.os === "windows");
-    expect(windows).toBeDefined();
-    const targets = [windows!.primary, ...windows!.others].map(
-      ({ arch, ext }) => `${arch}.${ext}`,
-    );
-    expect(targets).toEqual(
-      expect.arrayContaining(["x64.exe", "x64.msi", "arm64.exe", "arm64.msi"]),
-    );
+describe("download assets from GitHub Releases", () => {
+  const makeRelease = (names: string[]): LatestRelease => ({
+    version: "0.1.25",
+    url: "https://github.com/vectora-company/vectora/releases/tag/v0.1.25",
+    releases_url: "https://github.com/vectora-company/vectora/releases/latest",
+    assets: names.map((name) => ({
+      name: `Vectora-0.1.25-${name}`,
+      url: `https://github.com/vectora-company/vectora/releases/download/v0.1.25/Vectora-0.1.25-${name}`,
+    })),
   });
 
-  it("exposes DMG and ZIP only for Apple Silicon", () => {
-    const mac = PLATFORMS.find((platform) => platform.os === "macos");
-    expect(mac).toBeDefined();
-    const targets = [mac!.primary, ...mac!.others].map(
-      ({ arch, ext }) => `${arch}.${ext}`,
+  it("links only installers present in the release and prefers the primary package", () => {
+    const platforms = resolveDownloadPlatforms(
+      makeRelease([
+        "win-x64.exe",
+        "win-x64.msi",
+        "mac-arm64.dmg",
+        "linux-x86_64.AppImage",
+        "linux-aarch64.deb",
+        "linux-amd64.snap",
+        "Vectora-0.1.25-linux-x86_64.AppImage.asc",
+      ]),
     );
-    expect(targets).toEqual(expect.arrayContaining(["arm64.dmg", "arm64.zip"]));
-    expect(targets).not.toContain("x64.dmg");
-    expect(targets).not.toContain("x64.zip");
+
+    expect(platforms.map(({ os }) => os)).toEqual([
+      "windows",
+      "macos",
+      "linux",
+    ]);
+    expect(platforms[0].primary.url).toContain("win-x64.exe");
+    expect(platforms[0].others.map(({ url }) => url)).toEqual([
+      expect.stringContaining("win-x64.msi"),
+    ]);
+    expect(platforms[1].primary.url).toContain("mac-arm64.dmg");
+    expect(platforms[2].primary.url).toContain("linux-x86_64.AppImage");
+    expect(platforms[2].others.map(({ url }) => url)).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("linux-aarch64.deb"),
+        expect.stringContaining("linux-amd64.snap"),
+      ]),
+    );
+    expect(
+      platforms.flatMap(({ primary, others }) => [primary, ...others]),
+    ).toHaveLength(6);
   });
 
-  it("exposes every Linux package format on x64 and ARM64", () => {
-    const linux = PLATFORMS.find((platform) => platform.os === "linux");
-    expect(linux).toBeDefined();
-    const targets = new Set(
-      [linux!.primary, ...linux!.others].map(
-        ({ arch, ext }) => `${arch}.${ext}`,
-      ),
-    );
-    for (const arch of ["x64", "arm64"]) {
-      for (const ext of [
-        "AppImage",
-        "deb",
-        "rpm",
-        "snap",
-        "pkg.tar.zst",
-        "flatpak",
-        "tar.gz",
-      ]) {
-        expect(targets).toContain(`${arch}.${ext}`);
-      }
-    }
-  });
-
-  it("creates a download URL using the same OS/architecture/format contract as Services", () => {
-    expect(downloadHref("linux", "arm64", "pkg.tar.zst")).toBe(
-      "https://services.vectora.company/download/latest/linux-arm64.pkg.tar.zst",
-    );
-  });
-
-  it("does not render duplicate download targets", () => {
-    for (const platform of PLATFORMS) {
-      const targets = [platform.primary, ...platform.others].map(
-        ({ arch, ext }) => `${platform.osToken}-${arch}.${ext}`,
-      );
-      expect(new Set(targets).size).toBe(targets.length);
-    }
+  it("returns no platforms when a release has no recognized installer assets", () => {
+    expect(
+      resolveDownloadPlatforms(makeRelease(["SHA256SUMS", "key.asc"])),
+    ).toEqual([]);
+    expect(resolveDownloadPlatforms(null)).toEqual([]);
   });
 });

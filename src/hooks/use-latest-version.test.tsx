@@ -4,14 +4,13 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
-import { useLatestVersion } from "./use-latest-version";
+import { useLatestRelease, useLatestVersion } from "./use-latest-version";
 
 function makeWrapper() {
   const qc = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
   return {
-    qc,
     wrapper: ({ children }: { children: ReactNode }) => (
       <QueryClientProvider client={qc}>{children}</QueryClientProvider>
     ),
@@ -19,6 +18,17 @@ function makeWrapper() {
 }
 
 const fetchMock = vi.fn();
+const release = {
+  version: "0.1.25",
+  url: "https://github.com/vectora-company/vectora/releases/tag/v0.1.25",
+  releases_url: "https://github.com/vectora-company/vectora/releases/latest",
+  assets: [
+    {
+      name: "Vectora-0.1.25-linux-x86_64.AppImage",
+      url: "https://github.com/vectora-company/vectora/releases/download/v0.1.25/Vectora-0.1.25-linux-x86_64.AppImage",
+    },
+  ],
+};
 
 beforeEach(() => {
   fetchMock.mockReset();
@@ -29,57 +39,40 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("useLatestVersion", () => {
-  it("resolve a versão do canal 'latest' por padrão", async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => ({ version: "0.1.10", channel: "latest" }),
-    });
+describe("latest GitHub release hooks", () => {
+  it("loads release metadata from the same-origin endpoint", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => release });
     const { wrapper } = makeWrapper();
+    const { result } = renderHook(() => useLatestRelease(), { wrapper });
 
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(result.current.data).toEqual(release);
+    expect(fetchMock).toHaveBeenCalledWith("/api/releases/latest");
+  });
+
+  it("selects the latest version for the landing page badge", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => release });
+    const { wrapper } = makeWrapper();
     const { result } = renderHook(() => useLatestVersion(), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(result.current.data).toBe("0.1.10");
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/version/latest"),
-    );
+    expect(result.current.data).toBe("0.1.25");
   });
 
-  it("canal customizado é repassado na URL", async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => ({ version: "0.1.11-beta", channel: "beta" }),
-    });
-    const { wrapper } = makeWrapper();
-
-    const { result } = renderHook(() => useLatestVersion("beta"), {
-      wrapper,
-    });
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/version/beta"),
-    );
-  });
-
-  it("resposta não-ok (API fora do ar) resolve null, não lança", async () => {
+  it("returns null for an unavailable release endpoint", async () => {
     fetchMock.mockResolvedValue({ ok: false, json: async () => ({}) });
     const { wrapper } = makeWrapper();
-
     const { result } = renderHook(() => useLatestVersion(), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data).toBeNull();
   });
 
-  it("erro de rede vira estado de erro do hook, sem derrubar o componente", async () => {
+  it("keeps network failures in query error state without crashing the component", async () => {
     fetchMock.mockRejectedValue(new Error("network down"));
     const { wrapper } = makeWrapper();
-
     const { result } = renderHook(() => useLatestVersion(), { wrapper });
 
-    // retry: 1 do hook soma um round-trip extra antes de isError virar true.
     await waitFor(() => expect(result.current.isError).toBe(true), {
       timeout: 3000,
     });
